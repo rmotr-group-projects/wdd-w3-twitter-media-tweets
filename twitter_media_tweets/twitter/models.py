@@ -13,3 +13,11 @@ class Tweet(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
     content = models.CharField(max_length=140, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
+
+
+class ImageTweet(models.Model):
+    image_url = models.URLField()
+
+
+class VideoTweet(models.Model):
+    video_url = models.URLField()

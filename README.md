@@ -1,5 +1,9 @@
 # Tweet media types
 
+For this project, we'll use the Django [Content Types framekwork](https://docs.djangoproject.com/en/1.10/ref/contrib/contenttypes/) to add different types of tweets to our Twitter clone. Specifically, we'll add **image** and **video** tweets to our regular **text** tweet. We'll need to make our Tweet model support different types of tweet, that should be generic. By "generic" we mean you can't hardcode a `image_url` field to the `Tweet` model. You'll need somehow make use of the model classes `ImageTweet` and `VideoTweet` from `twitter/models.py`. As usual, you'll find out that this process is really simple using the correct Django helper; in this case you might want to take a look at [Generic Relations](https://docs.djangoproject.com/en/1.10/ref/contrib/contenttypes/#generic-relations).
+
+Once you finish implementing your project to support _images_ and _videos_, try extending the project to support a new type of tweet `GistTweet` that receives a Github's Gist URL. If you've used generic relations, it's going to be simple to extend it.
+
 ## Base project
 
 As usual, we have our regular Twitter feed view:
