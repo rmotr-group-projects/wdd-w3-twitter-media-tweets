@@ -1,6 +1,15 @@
 {% extends 'base.html'%}
 {% load static %}
 
+{% block extra_styles %}
+<style media="screen">
+  a.selected,a.selected:hover{
+    text-decoration: none;
+    color: #000;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="col-sm-2">
   {% if twitter_profile.avatar %}
@@ -14,30 +23,45 @@
 
   {% if request.user == twitter_profile %}
     <div class="row">
-        <form role="form" class='tweet-form' action="" method="POST">
-          {% csrf_token %}
-            <div class="form-group {{form.errors|yesno:"has-error,,"}}">
-                <textarea class="form-control" name="content" placeholder="Write your tweet here..." required>{% spaceless %}
-                  {% if form.content.value %}
-                    {{ form.content.value }}
+        <div class="col-xs-12">
+          <div class="row js-tweet-type-controls">
+            <div class="col-xs-4 text-center">
+              <a href="#" class='selected' data-tweet-type='text'>Text Tweet</a>
+            </div>
+            <div class="col-xs-4 text-center">
+              <a href="#" data-tweet-type='image'>Image Tweet</a>
+            </div>
+            <div class="col-xs-4 text-center">
+              <a href="#" data-tweet-type='video'>Video Tweet</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <form role="form" class='tweet-form' action="" method="POST">
+            {% csrf_token %}
+              <div class="form-group {{form.errors|yesno:"has-error,,"}}">
+                  <textarea class="form-control" name="content" placeholder="Write your tweet here..." required>{% spaceless %}
+                    {% if form.content.value %}
+                      {{ form.content.value }}
+                    {% endif %}
+                  {% endspaceless %}</textarea>
+                  {% if form.content.errors %}
+                    {% for error in form.content.errors %}
+                      <span class="help-block">{{error}}</span>
+                    {% endfor %}
                   {% endif %}
-                {% endspaceless %}</textarea>
-                {% if form.content.errors %}
-                  {% for error in form.content.errors %}
-                    <span class="help-block">{{error}}</span>
-                  {% endfor %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                <label for="image_url">Image URL</label>
-                <input class="form-control" name="image_url" placeholder="Tweet image url">
-            </div>
-            <div class="form-group">
-                <label for="video_url">Video URL</label>
-                <input class="form-control" name="video_url" placeholder="Please follow this format: https://www.youtube.com/embed/video-id">
-            </div>
-            <button type="submit" class="btn btn-info pull-right">Submit</button>
-        </form>
+              </div>
+              <div class="form-group" data-tweet-type='image' style='display:none'>
+                  <label for="image_url">Image URL</label>
+                  <input class="form-control" name="image_url" placeholder="Tweet image url">
+              </div>
+              <div class="form-group" data-tweet-type='video' style='display:none'>
+                  <label for="video_url">Video URL</label>
+                  <input class="form-control" name="video_url" placeholder="Please follow this format: https://www.youtube.com/embed/video-id">
+              </div>
+              <button type="submit" class="btn btn-info pull-right">Submit</button>
+          </form>
+        </div>
     </div>
   {% endif %}
   {% if request.path != '/' %}
@@ -65,3 +89,22 @@
   </div>
 </div>
 <div class="col-sm-2"></div>{% endblock %}
+
+{% block extra_scripts %}
+<script type="text/javascript">
+  $('.js-tweet-type-controls a').on('click', function(evt){
+    var elem = $(evt.target);
+    var tweetType = elem.data('tweet-type');
+    if(elem.hasClass('selected')){
+      return;
+    }
+    $('.js-tweet-type-controls a.selected').removeClass('selected')
+    elem.toggleClass('selected');
+
+    $('.form-group[data-tweet-type]').hide();
+    if(tweetType !== 'text'){
+      $('.form-group[data-tweet-type="' + tweetType + '"]').show();
+    }
+  })
+</script>
+{% endblock %}

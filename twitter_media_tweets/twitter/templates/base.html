@@ -10,6 +10,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'twitter/styles.css' %}" />
+    {% block extra_styles %}{% endblock %}
 </head>
 
 <body>
@@ -69,4 +70,5 @@
   crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
   type="text/javascript"></script>
+  {% block extra_scripts %}{% endblock %}
 </html>
