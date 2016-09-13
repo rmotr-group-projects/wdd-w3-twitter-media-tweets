@@ -12,6 +12,14 @@ class TweetModelsTestCase(TestCase):
             email='lpage@google.com', birth_date=date(1992, 7, 6),
             password='password123')
 
+    def test_text_tweets(self):
+        """Should create a Tweet of type text when no media is specified"""
+        self.assertEqual(Tweet.objects.count(), 0)
+        Tweet.objects.create(user=self.user, content="Image tweet")
+        self.assertEqual(Tweet.objects.count(), 1)
+        tweet = Tweet.objects.first()
+        self.assertEqual(tweet.type, 'text')
+
     def test_image_tweets(self):
         """Should create a Tweet of type image when given url is valid"""
         self.assertEqual(Tweet.objects.count(), 0)
@@ -33,10 +41,4 @@ class TweetModelsTestCase(TestCase):
         tweet = Tweet.objects.first()
         self.assertEqual(tweet.type, 'video')
 
-    def test_text_tweets(self):
-        """Should create a Tweet of type text when no media is specified"""
-        self.assertEqual(Tweet.objects.count(), 0)
-        Tweet.objects.create(user=self.user, content="Image tweet")
-        self.assertEqual(Tweet.objects.count(), 1)
-        tweet = Tweet.objects.first()
-        self.assertEqual(tweet.type, 'text')
+
