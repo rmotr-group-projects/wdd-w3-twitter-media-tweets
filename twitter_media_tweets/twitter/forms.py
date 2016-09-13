@@ -3,7 +3,7 @@ from django import forms
 from .models import Tweet
 
 
-class TweetForm(forms.ModelForm):
-    class Meta:
-        model = Tweet
-        fields = ['content']
+class TweetForm(forms.Form):
+    content = forms.CharField(max_length=140)
+    image_url = forms.URLField(required=False)
+    video_url = forms.URLField(required=False)

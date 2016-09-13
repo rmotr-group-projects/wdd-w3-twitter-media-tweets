@@ -1,0 +1,14 @@
+<div class="well well-large tweet-container">
+    {% if twitter_profile == request.user and tweet.user == request.user %}
+    <form id='delete-tweet-form-{{tweet.id}}' action="/tweet/{{tweet.id}}/delete?next={{request.path}}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="close" title="Delete this tweet"><span aria-hidden="true">&times;</span></button>
+    </form>
+    {% endif %}
+    <div>
+        <div>{{tweet.type}}</div>
+        <strong>@{{tweet.user.username}}</strong>
+        <span class="label label-primary created-datetime">{{tweet.created|date:"SHORT_DATETIME_FORMAT"}}</span>
+    </div>
+    <div class='tweet-content'>{{ tweet.content }}</div>
+</div>

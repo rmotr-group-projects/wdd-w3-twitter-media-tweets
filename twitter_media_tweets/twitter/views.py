@@ -12,7 +12,7 @@ from django.views.generic import FormView
 from django.views.generic.base import View, TemplateView
 from django.views.decorators.http import require_POST
 
-from .models import Tweet
+from .models import Tweet, ImageTweet, VideoTweet
 from .forms import TweetForm
 
 User = get_user_model()
@@ -36,9 +36,21 @@ def home(request, username=None):
             return HttpResponseForbidden()
         form = TweetForm(request.POST)
         if form.is_valid():
-            tweet = form.save(commit=False)
-            tweet.user = request.user
-            tweet.save()
+            image_url = form.cleaned_data.get('image_url')
+            video_url = form.cleaned_data.get('video_url')
+            content = form.cleaned_data.get('content')
+
+            if image_url:
+                image_tweet = ImageTweet.objects.create(image_url=image_url)
+                Tweet.objects.create(
+                    user=request.user, content=content, media=image_tweet)
+            elif video_url:
+                video_tweet = VideoTweet.objects.create(video_url=video_url)
+                Tweet.objects.create(
+                    user=request.user, content=content, media=video_tweet)
+            else:
+                Tweet.objects.create(user=request.user, content=content)
+
             messages.success(request, 'Tweet Created!')
 
     form = TweetForm()

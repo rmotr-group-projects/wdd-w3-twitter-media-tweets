@@ -34,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label for="video_url">Video URL</label>
-                <input class="form-control" name="video_url" placeholder="Tweet video url">
+                <input class="form-control" name="video_url" placeholder="Please follow this format: https://www.youtube.com/embed/video-id">
             </div>
             <button type="submit" class="btn btn-info pull-right">Submit</button>
         </form>
@@ -46,19 +46,19 @@
   <div class="row tweet-feed">
 
       {% for tweet in tweets %}
-      <div class="well well-large tweet-container">
-          {% if twitter_profile == request.user and tweet.user == request.user %}
-          <form id='delete-tweet-form-{{tweet.id}}' action="/tweet/{{tweet.id}}/delete?next={{request.path}}" method="POST">
-              {% csrf_token %}
-              <button type="submit" class="close" title="Delete this tweet"><span aria-hidden="true">&times;</span></button>
-          </form>
-          {% endif %}
-          <div>
-              <strong>@{{tweet.user.username}}</strong>
-              <span class="label label-primary created-datetime">{{tweet.created|date:"SHORT_DATETIME_FORMAT"}}</span>
-          </div>
-          <div class='tweet-content'>{{ tweet.content }}</div>
-      </div>
+
+        {% if tweet.type == "video" %}
+          {% include "video_tweet.html" %}
+        {% endif %}
+
+        {% if tweet.type == "image" %}
+          {% include "image_tweet.html" %}
+        {% endif %}
+
+        {% if tweet.type == "text" %}
+          {% include "text_tweet.html" %}
+        {% endif %}
+
       {% empty %}
         <p><strong>@{{twitter_profile.username}}</strong> hasn't tweeted yet :(</p>
       {% endfor %}

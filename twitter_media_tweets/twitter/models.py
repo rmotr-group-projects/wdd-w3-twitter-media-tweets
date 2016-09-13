@@ -17,9 +17,6 @@ class Tweet(models.Model):
     MODELS = (models.Q(app_label='twitter', model='ImageTweet') |
               models.Q(app_label='twitter', model='VideoTweet'))
 
-    class Meta:
-        ordering = ['-created']
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
     content = models.CharField(max_length=140, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -33,6 +30,17 @@ class Tweet(models.Model):
                                            blank=True,
                                            verbose_name='Tweet Id')
     media = GenericForeignKey('media_type', 'media_id')
+
+    @property
+    def type(self):
+        if str(self.media_type) == 'video tweet':
+            return "video"
+        elif str(self.media_type) == 'image tweet':
+            return "image"
+        return "text"
+
+    class Meta:
+        ordering = ['-created']
 
 
 class ImageTweet(models.Model):

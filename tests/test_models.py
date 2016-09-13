@@ -5,7 +5,7 @@ from django.test import TestCase
 from twitter.models import *
 
 
-class MediaTweetsTestCase(TestCase):
+class TweetModelsTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username='larrypage', first_name='Larry', last_name='Page',
