@@ -29,9 +29,6 @@ def home(request, username=None):
 
     if request.method == 'POST':
         form = TweetForm(request.POST)
-        # for k, v in form.data.items():
-        #     print(str(v))
-        # print(form.is_valid())
         if form.is_valid():
             tweet = Tweet.objects.create(user=user, content=form.cleaned_data['content'])
             if form.cleaned_data['image_url']:
@@ -39,11 +36,6 @@ def home(request, username=None):
             elif form.cleaned_data['video_url']:
                 tweet.media = VideoTweet.objects.create(video_url=form.cleaned_data['video_url'])
             tweet.save()
-            # print(tweet.media)
-            # print(str(form))
-            # print(str(form.cleaned_data))
-        # raise NotImplementedError()
-        # pass
 
     form = TweetForm()
 
