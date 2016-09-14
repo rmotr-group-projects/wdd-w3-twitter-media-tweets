@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
 
-from .models import Tweet
+from .models import Tweet, ImageTweet, VideoTweet
 from .forms import TweetForm
 
 User = get_user_model()
@@ -28,7 +28,14 @@ def home(request, username=None):
     user = request.user
 
     if request.method == 'POST':
-        raise NotImplementedError()
+        form = TweetForm(request.POST)
+        if form.is_valid():
+            tweet = Tweet.objects.create(user=user, content=form.cleaned_data['content'])
+            if form.cleaned_data['image_url']:
+                tweet.media = ImageTweet.objects.create(image_url=form.cleaned_data['image_url'])
+            elif form.cleaned_data['video_url']:
+                tweet.media = VideoTweet.objects.create(video_url=form.cleaned_data['video_url'])
+            tweet.save()
 
     form = TweetForm()
 
