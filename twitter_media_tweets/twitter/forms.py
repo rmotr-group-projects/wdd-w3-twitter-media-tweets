@@ -10,7 +10,7 @@ class TweetForm(forms.Form):
 
     def clean_video_url(self):
         data = self.cleaned_data['video_url']
-        if "https://www.youtube.com/embed/" not in data:
+        if data and "https://www.youtube.com/embed/" not in data:
             raise forms.ValidationError("Your video url needs to be in the format \"https://www.youtube.com/embed/id\"")
 
         # Always return the cleaned data, whether you have changed it or
